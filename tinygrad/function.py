@@ -42,7 +42,13 @@ class Sin(Function):
     return x.e(UnaryOps.SIN)
 
   def backward(self, grad_output:LazyBuffer) -> LazyBuffer:
-    return self.x.const(math.pi / 2).e(BinaryOps.SUB, self.x).e(UnaryOps.SIN).e(BinaryOps.MUL, grad_output)
+    return self.temp(self.x.const(math.pi / 2).e(BinaryOps.SUB, self.x)).e(BinaryOps.MUL, grad_output)
+
+  def temp(self, x:LazyBuffer) -> LazyBuffer:
+    for i in range(10):
+      x.e(BinaryOps.ADD if i % 2 == 0 else BinaryOps.SUB, x.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).
+             e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3)))
+    return x
 
 # NOTE: maximum(x, 0) behaves differently where x=0
 class Relu(Function):
