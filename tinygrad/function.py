@@ -45,7 +45,6 @@ class Sin(Function):
     return self.temp(self.x.const(math.pi / 2).e(BinaryOps.SUB, self.x)).e(BinaryOps.MUL, grad_output)
 
   def temp(self, x:LazyBuffer) -> LazyBuffer:
-    x_copy = deepcopy(x)
     res = x.const(0)
     term = x
     for i in range(20):
@@ -54,7 +53,6 @@ class Sin(Function):
       else:
         res = res.e(BinaryOps.SUB, term)
       term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
-    self.x = x_copy
     return res
 
 # NOTE: maximum(x, 0) behaves differently where x=0
