@@ -47,7 +47,10 @@ class Sin(Function):
   def temp(self, x:LazyBuffer) -> LazyBuffer:
     res = x.const(0)
     for i in range(20):
-      res = res.e(BinaryOps.ADD, x.const(-1 * i%2))
+      if i % 2 == 0:
+        res = res.e(BinaryOps.ADD, x)
+      else:
+        res = res.e(BinaryOps.SUB, x)
       x = x.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
     return res
 
