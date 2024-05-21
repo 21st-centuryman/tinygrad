@@ -48,10 +48,7 @@ class Sin(Function):
     res = x.const(0)
     term = x
     for i in range(20):
-      if i % 2 == 0:
-        res = res.e(BinaryOps.ADD, term)
-      else:
-        res = res.e(BinaryOps.SUB, term)
+      res = res.e(BinaryOps.ADD, term.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
       term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
     return res
 
