@@ -38,8 +38,7 @@ class Reciprocal(Function):
 
 class Sin(Function):
   def forward(self, x:LazyBuffer) -> LazyBuffer:
-    self.x = x
-    return x.e(UnaryOps.SIN)
+    return self.temp(x)
 
   def backward(self, grad_output:LazyBuffer) -> LazyBuffer:
     return self.temp(self.x.const(math.pi / 2).e(BinaryOps.SUB, self.x)).e(BinaryOps.MUL, grad_output)
@@ -50,6 +49,8 @@ class Sin(Function):
     for i in range(14):
       res = res.e(BinaryOps.ADD, term.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
       term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
+      # return [x.const(0).e(BinaryOps.ADD, x.e(BinaryOps.Mul, FIX X^(2i + 1)).e(BinaryOps.DIV, x.const(math.factorial(2*i + 1))).e(BinaryOps.MUL, x.const((-1) ** (i % 2)))).cast(dtype.uint32) for i in range(20)]
+      #  ^ DREAM
     return res
 
 # NOTE: maximum(x, 0) behaves differently where x=0
