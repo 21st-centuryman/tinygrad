@@ -48,8 +48,8 @@ class Sin(Function):
     res = x.const(0)
     term = x
     for i in range(14):
-      term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
-      res = res.e(BinaryOps.ADD, term.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
+      res = res.e(BinaryOps.ADD, term)
+      term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3)).e(BinaryOps.MUL, x.const((-1) ** (i % 2)))
     return res
 
     # return x.r(ReduceOps.SUM, tuple(x.e(BinaryOps.ADD, x.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
