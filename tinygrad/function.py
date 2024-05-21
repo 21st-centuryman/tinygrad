@@ -46,15 +46,12 @@ class Sin(Function):
 
   def temp(self, x:LazyBuffer) -> LazyBuffer:
     res = x.const(0)
-    term = x
+    term = x;
     for i in range(14):
-      res = res.e(BinaryOps.ADD, term)
-      term = term.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3)).e(BinaryOps.MUL, x.const((-1) ** (i % 2)))
+      res = res.e(BinaryOps.ADD, term.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
+      term = x.e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 3))
     return res
 
-    # return x.r(ReduceOps.SUM, tuple(x.e(BinaryOps.ADD, x.e(BinaryOps.MUL, x.const((-1) ** (i % 2))))
-    #       .e(BinaryOps.MUL, x).e(BinaryOps.DIV, x.const(2 * i + 2)).e(BinaryOps.MUL, x)
-    #       .e(BinaryOps.DIV, x.const(2 * i + 3)) for i in range(20)))
 
 
 # NOTE: maximum(x, 0) behaves differently where x=0
