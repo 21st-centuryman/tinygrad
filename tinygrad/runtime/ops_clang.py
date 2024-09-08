@@ -6,9 +6,9 @@ from tinygrad.renderer.cstyle import ClangRenderer
 class ClangCompiler(Compiler):
   def compile(self, src:str) -> bytes:
     # TODO: remove file write. sadly clang doesn't like the use of /dev/stdout here
-    march = f'-march={platform.processor()}g' if platform.processor() in ["riscv64", "riscv32"] else "-march=native"
+    march = f'-march={platform.processor()}g' if platform.processor() in ["riscv64", "riscv32"] else '-march=native'
     with tempfile.NamedTemporaryFile(delete=True) as output_file:
-      subprocess.check_output(['clang', '-shared', {march}, '-O2', '-Wall', '-Werror', '-x', 'c', '-fPIC', '-ffreestanding', '-nostdlib',
+      subprocess.check_output(['clang', '-shared', march, '-O2', '-Wall', '-Werror', '-x', 'c', '-fPIC', '-ffreestanding', '-nostdlib',
                                '-', '-o', str(output_file.name)], input=src.encode('utf-8'))
       return pathlib.Path(output_file.name).read_bytes()
 
